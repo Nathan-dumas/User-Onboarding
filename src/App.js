@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 import Form from './Components/Form'
-import * as Yup from 'yup'
-
+import * as yup from 'yup'
+import SiteUsers from './Components/SiteUsers'
+import schema from './Components/FormSchema'
 const initialValues = {
   name: '',
   email: '',
@@ -17,18 +18,32 @@ const initialErrors = {
   TOS: '',
 }
 
-const initialUsers = []
+// const initialUsers = []
 const initialDisabled = true
 
 
 function App() {
 
-  const [users, setUsers] = useState(initialUsers)
+  const [users, setUsers] = useState([])
   const [formValues, setFormValues] = useState(initialValues)
   const [formErrors, setFormErrors] = useState(initialErrors)
   const [disabled, setDisabled] = useState(initialDisabled)
 
-  const updateForm = (inputName, inputValue) => {
+  const changeForm = (inputName, inputValue) => {
+    yup.reach(schema, inputName)
+      .validate(inputValue)
+      .then(() => {
+        setFormErrors({
+          ...formErrors,
+          [inputName]: '',
+        })
+      })
+      .catch((err) => {
+        setFormErrors({
+          ...formErrors,
+          [inputName]: err.errors[0]
+        })
+      })
     setFormValues({
       ...formValues,
       [inputName]: inputValue,
@@ -42,17 +57,31 @@ function App() {
       password: formValues.password.trim(),
       TOS: ['TOS'].filter(TOS => formValues[TOS])
     }
-    setUsers(...users, newUser)
+    setUsers([...users, newUser])
     setFormValues(initialValues)
   }
 
+
+  useEffect(() => {
+    schema.isValid(formValues).then(valid => setDisabled(!valid))
+  }, [formValues])
+
   return (
     <div className="App">
-      <Form 
+      <Form
         values={formValues}
         submit={submitForm}
-        update={updateForm}
+        change={changeForm}
+        disabled={disabled}
+        errors={formErrors}
       />
+      {
+        users.map(user => {
+          return (
+            <SiteUsers details={user} />
+          )
+        })
+      }
     </div>
   )
 }
