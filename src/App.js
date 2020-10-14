@@ -1,26 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import './App.css'
+import Form from './Components/Form'
+import * as Yup from 'yup'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const initialValues = {
+  name: '',
+  email: '',
+  password: '',
+  TOS: false,
 }
 
-export default App;
+const initialErrors = {
+  name: '',
+  email: '',
+  password: '',
+  TOS: '',
+}
+
+const initialUsers = []
+const initialDisabled = true
+
+
+function App() {
+
+  const [users, setUsers] = useState(initialUsers)
+  const [formValues, setFormValues] = useState(initialValues)
+  const [formErrors, setFormErrors] = useState(initialErrors)
+  const [disabled, setDisabled] = useState(initialDisabled)
+
+  const updateForm = (inputName, inputValue) => {
+    setFormValues({
+      ...formValues,
+      [inputName]: inputValue,
+    })
+  }
+
+  const submitForm = () => {
+    const newUser = {
+      name: formValues.name.trim(),
+      email: formValues.email.trim(),
+      password: formValues.password.trim(),
+      TOS: ['TOS'].filter(TOS => formValues[TOS])
+    }
+    setUsers(...users, newUser)
+    setFormValues(initialValues)
+  }
+
+  return (
+    <div className="App">
+      <Form 
+        values={formValues}
+        submit={submitForm}
+        update={updateForm}
+      />
+    </div>
+  )
+}
+
+export default App
