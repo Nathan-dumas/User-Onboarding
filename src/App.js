@@ -4,6 +4,9 @@ import Form from './Components/Form'
 import * as yup from 'yup'
 import SiteUsers from './Components/SiteUsers'
 import schema from './Components/FormSchema'
+import axios from 'axios'
+
+
 const initialValues = {
   name: '',
   email: '',
@@ -18,16 +21,25 @@ const initialErrors = {
   TOS: '',
 }
 
-// const initialUsers = []
+const initialUsers = []
 const initialDisabled = true
 
 
 function App() {
 
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState(initialUsers)
   const [formValues, setFormValues] = useState(initialValues)
   const [formErrors, setFormErrors] = useState(initialErrors)
   const [disabled, setDisabled] = useState(initialDisabled)
+
+  const postUsers = newUser => {
+    axios
+      .post('https://reqres.in/api/users', newUser)
+      .then(res => {
+        setUsers([...users, res.data])
+      })
+      .catch(err => console.log(err))
+  }
 
   const changeForm = (inputName, inputValue) => {
     yup.reach(schema, inputName)
@@ -57,9 +69,10 @@ function App() {
       password: formValues.password.trim(),
       TOS: ['TOS'].filter(TOS => formValues[TOS])
     }
-    setUsers([...users, newUser])
-    setFormValues(initialValues)
+
+    postUsers(newUser)
   }
+
 
 
   useEffect(() => {

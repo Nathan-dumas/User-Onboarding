@@ -19,12 +19,10 @@ export default function Form(props) {
     return (
         <form onSubmit={onSubmit}>
             <div>
-                <div>{errors.name}</div>
-                <div>{errors.email}</div>
-                <div>{errors.TOS}</div>
-                <div>{errors.password}</div>
+
             </div>
             <label htmlFor='name'>Name:
+            <br />
                 <input
                     name='name'
                     value={values.name}
@@ -32,8 +30,11 @@ export default function Form(props) {
                     placeholder='Name'
                     type='text' />
             </label>
+            <div>{errors.name}</div>
+            <br />
 
             <label htmlFor='email'>Email:
+            <br />
                 <input
                     name='email'
                     value={values.email}
@@ -41,8 +42,11 @@ export default function Form(props) {
                     placeholder='Email'
                     type='email' />
             </label>
+            <div>{errors.email}</div>
+            <br />
 
             <label htmlFor='password'>Password:
+            <br />
                 <input
                     name='password'
                     value={values.password}
@@ -50,6 +54,7 @@ export default function Form(props) {
                     placeholder='Password'
                     type='password' />
             </label>
+            <div>{errors.password}</div>
             <br />
             <label>TOS:
             <br />
@@ -59,6 +64,7 @@ export default function Form(props) {
                     onChange={onChange}
                     type='checkbox' />
             </label>
+            <div>{errors.TOS}</div>
             <br />
             <button disabled={disabled}>Submit</button>
         </form>
