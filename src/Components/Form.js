@@ -66,7 +66,7 @@ export default function Form(props) {
             </label>
             <div>{errors.TOS}</div>
             <br />
-            <button disabled={disabled}>Submit</button>
+            <button type="submit" disabled={disabled}>Submit</button>
         </form>
     )
 }
