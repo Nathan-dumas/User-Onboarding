@@ -43,6 +43,7 @@ describe("Advanced Form", () => {
       passwordInput().type('123456')
       checkbox().click()
       submitBtn().click()
+      // Validation
       checkbox().click()
   })
 

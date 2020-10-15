@@ -71,6 +71,7 @@ function App() {
     }
 
     postUsers(newUser)
+    setFormValues(initialValues)
   }
 
 
